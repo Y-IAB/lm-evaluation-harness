@@ -3,7 +3,7 @@ task: aihub_ko-en
 dataset_name: aihub_ko-en
 dataset_path: json
 dataset_kwargs:
-  data_files: lm_eval/tasks/wmt2016/ai-hub-ko-en-1000.jsonl
+  data_files: lm_eval/tasks/iab/ai-hub-ko-en-1000.jsonl
 output_type: generate_until
 test_split: train
 

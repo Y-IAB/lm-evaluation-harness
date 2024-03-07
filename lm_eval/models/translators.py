@@ -1,16 +1,18 @@
 import json
+import logging
 import time
+from typing import List, Literal, Optional, Tuple, Union
+
+import deepl
 import httpx
 import openai
-from openai import AzureOpenAI
-from lm_eval.api.registry import register_model
-import deepl
-from lm_eval.api.model import LM
-from typing import List, Literal, Optional, Tuple, Union
-from lm_eval.api.instance import Instance
 import requests
-import logging
+from openai import AzureOpenAI
 from tqdm import tqdm
+
+from lm_eval.api.instance import Instance
+from lm_eval.api.model import LM
+from lm_eval.api.registry import register_model
 
 logging.basicConfig()
 logging.getLogger('deepl').setLevel(logging.ERROR)
@@ -27,6 +29,7 @@ class DeepLTranslator(LM):
         super().__init__()
 
         self.api_key = api_key
+
         self.source_lang = self._convert_lang_to_code(source_lang)
         self.target_lang = self._convert_lang_to_code(target_lang)
 
@@ -39,8 +42,8 @@ class DeepLTranslator(LM):
         results = []
 
         for request in tqdm(reqs):
-            source_text = request.doc['translation']['en']
-            # translated_text = request.doc['translation']['ro']
+            # The first argument is the formatted doc_to_text text.
+            source_text = request.args[0]
 
             try:
                 result = self.translator.translate_text(

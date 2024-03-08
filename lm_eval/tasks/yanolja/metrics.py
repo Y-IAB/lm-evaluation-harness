@@ -2,6 +2,7 @@ import json
 import os
 
 import evaluate
+import torch
 from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 
@@ -27,7 +28,9 @@ def xcomet(predictions, references):
     model_path = download_model("Unbabel/wmt22-cometkiwi-da")
     model = load_from_checkpoint(model_path)
 
-    model_output = model.predict(data, batch_size=8, gpus=0)
+    model_output = model.predict(data,
+                                 batch_size=8,
+                                 gpus=torch.cuda.device_count())
 
     # Example output:
     # Prediction([('scores', [0.8676194548606873]), ('system_score', 0.8676194548606873)])

@@ -5,7 +5,7 @@ import evaluate
 from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 
-AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
+AZURE_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")
 

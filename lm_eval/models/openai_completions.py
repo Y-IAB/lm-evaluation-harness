@@ -372,6 +372,12 @@ class OpenaiChatCompletionsLM(LM):
         self.base_url = base_url
         self.truncate = truncate
 
+        # gets the API Key from environment variable AZURE_OPENAI_API_KEY
+        if self.base_url and "azure" in self.base_url:
+            self.client = openai.AzureOpenAI(api_version="2024-03-01-preview",
+                                             azure_endpoint=self.base_url)
+            return
+
         # Read from environment variable OPENAI_API_KEY
         # Set to EMPTY for local
         if self.base_url:

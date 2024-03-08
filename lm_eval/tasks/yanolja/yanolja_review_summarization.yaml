@@ -10,10 +10,10 @@ doc_to_text: "A chat between a curious user and an artificial intelligence assis
 Human: 주어진 한국어 text를 요약해주세요.
 text: {{text}}
 Assistant: "
-doc_to_target: "" # Reference-free metric
+doc_to_target: '{"reference": "{{summary}}", "source": "{{text}}"}'
 
 metric_list:
-  - metric: xcomet
+  - metric: !function metrics.xcomet
     aggregation: mean
     higher_is_better: true
 

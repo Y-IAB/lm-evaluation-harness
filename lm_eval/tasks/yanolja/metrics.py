@@ -9,23 +9,6 @@ AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")
 
 
-def bleu(predictions, references):
-    return (predictions[0], references[0])
-
-
-def agg_bleu(items):
-    bleu_fn = evaluate.load("bleu")
-    predictions, references = zip(*items)
-    return bleu_fn.compute(predictions=predictions,
-                           references=references)["bleu"]
-
-
-def bleurt(predictions, references):
-    bleurt_fn = evaluate.load("bleurt")
-    return bleurt_fn.compute(predictions=predictions,
-                             references=references)["scores"][0]
-
-
 def llm_eval(predictions, references):
     data = [{"response": predictions[0]}]
 

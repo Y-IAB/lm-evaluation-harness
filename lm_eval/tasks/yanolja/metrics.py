@@ -2,7 +2,7 @@ import json
 import os
 
 import evaluate
-from uptrain import EvalLLM, Evals, CritiqueTone, Settings
+from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 
 AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")

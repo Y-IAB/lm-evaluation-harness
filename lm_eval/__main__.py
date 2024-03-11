@@ -208,6 +208,11 @@ def parse_eval_args() -> argparse.Namespace:
         action="store_true",
         help="Sets trust_remote_code to True to execute code to create HF Datasets from the Hub",
     )
+    parser.add_argument(
+        "--task_config",
+        default=None,
+        help="Command separated string arguments to override task configurations, e.g. `doc_to_text=hello`",
+    )
 
     return parser.parse_args()
 
@@ -233,7 +238,9 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         )
 
     initialize_tasks(args.verbosity)
-    task_manager = TaskManager(args.verbosity, include_path=args.include_path)
+    task_manager = TaskManager(args.verbosity,
+                               include_path=args.include_path,
+                               task_config=args.task_config)
 
     if args.limit:
         eval_logger.warning(

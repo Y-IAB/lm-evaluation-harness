@@ -5,10 +5,20 @@ doc_to_text: "A chat between a curious user and an artificial intelligence assis
 Human: 주어진 한국어 text를 요약해주세요.
 text: {{text}}
 Assistant: "
-doc_to_target: "{{summary}}"
-
+doc_to_target: '{"reference": "{{summary}}", "source": "{{text}}", "target_lang": "ko"}'
 metric_list:
-  - metric: bleu
+  - metric: !function metrics.bleu
+    aggregation: !function metrics.agg_bleu
+    higher_is_better: true
+  - metric: !function metrics.rouge
+    aggregation: !function metrics.agg_rouge
+    higher_is_better: true
+  - metric: !function metrics.bertscore
+    aggregation: !function metrics.agg_bertscore
+    higher_is_better: true
+  - metric: !function metrics.bleurt
+    aggregation: !function metrics.agg_bleurt
+    higher_is_better: true
 
 generation_kwargs:
   until:

@@ -45,7 +45,7 @@ The table shows the task groups we prepared in advance and their descriptions:
 ### Available Models
 All models supported in the original repository are available. Also, we add some translation API with our Fragma API service and Azure OpenAI Service. Below are three models that we expect to use frequently. 
 |Model|Description|Model Args|Available Tasks|Example Usage|
-|---|---|---|---|
+|---|---|---|---|---|
 |openai-chat-completions|You can use OpenAI's various models (gpt-3.5-turbo, gpt-4-turbo, etc.) through this API. You can also use Azure OpenAI API by giving **azure endpoint** to base_url. You need to set `AZURE_OPENAI_API_KEY` environment variable.|model, base_url|yanolja_translation, yanolja_summarization|`lm_eval --model openai-chat-completions --model_args model=gpt-4-turbo,base_url=[BASE_URL] --tasks yanolja_summarization`|
 |hf|As in the original lm-evaluation-harness, you can evaluate the huggingface's model or a local model checkpoint. |pretrained|yanolja_translation, yanolja_summarization, yanolja_perplexity|lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization|
 |translator|You can use various translators through Yanolja's Fragma API. See the documentation for the available translators.|api_key, target_lang, endpoint, model|yanolja_translation|`lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRAGMA_API_KEY],target_lang=en,endpoint=[FRAGMA_ENDPOINT],model=[FRAGMA_MODEL] --task_config doc_to_text="{{source}}"`|

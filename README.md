@@ -2,6 +2,68 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10256836.svg)](https://doi.org/10.5281/zenodo.10256836)
 
+## Quick Guide For Yanolja Evaluations
+If you only want to evaluate your summarization/translation model for yanolja, then the only thing you need is to follow this guide and get evaluation results. 
+
+### Installation
+To evaluate your model, you should install bleurt first.
+```bash
+pip install --upgrade pip  # ensures that pip is current
+git clone https://github.com/google-research/bleurt.git
+pip install ./bleurt
+```
+
+After that, please install this repository.
+```bash
+git clone https://github.com/Y-IAB/lm-evaluation-harness
+cd lm-evaluation-harness
+pip install -e .
+```
+
+### Dataset Setting
+Before you evaluate your models, you need to download dataset first. Please downlaod dataset from the [link](https://drive.google.com/file/d/1-CWu5E96mo9ub_-UsEXnX2JpIU9onaHN/view?usp=sharing) and drop the JSONL dataset files into `lm_eval/tasks/yanolja/data`.
+
+### Basic Usage
+After that, you can evaluate summarization/translation quality for your model:
+```bash
+lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization,yanolja_translation,yanolja_perplexity --limit 1000 --batch_size=auto
+```
+
+If you only want to evaluate summarization quality, then you can give only `yanolja_summarization` for `--tasks` argument.
+```bash
+lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization --limit 1000 --batch_size=auto
+```
+
+The table shows the task groups we prepared in advance and their descriptions:
+
+|Task Name|Description|
+|---|---|
+|yanolja_summarization|This task group consists of various open-source summarization benchmarks (labeled) and real user input datasets from the yanolja reviewize service (unlabeled). The former are evaluated with reference-based metrics (BLEU, ROUGE, BLEURT, etc.), while the latter are evaluated with reference-free metrics (COMETKIWI, LLM Eval).|
+|yanolja_translation|This task group consists of various open-source translation benchmarks (labeled) and real user input datasets from the yanolja babel service (unlabeled). The former are evaluated with reference-based metrics (BLEU, ROUGE, BLEURT, etc.), while the latter are evaluated with reference-free metrics (COMETKIWI, LLM Eval).|
+|yanolja_perplexity|This task group measures the perplexity of LLM on yonolja real English/Korean data. By doing so, we determine the similarity between LLM's knowledge and yanolja data domain.|
+
+### Available Models
+All models supported in the original repository are available. Also, we add some translation API with our Fragma API service and Azure OpenAI Service. Below are three models that we expect to use frequently. 
+|Model|Description|Model Args|Available Tasks|Example Usage|
+|openai-chat-completions|You can use OpenAI's various models (gpt-3.5-turbo, gpt-4-turbo, etc.) through this API. You can also use Azure OpenAI API by giving **azure endpoint** to base_url. You need to set `AZURE_OPENAI_API_KEY` environment variable.|model, base_url|yanolja_translation, yanolja_summarization|`lm_eval --model openai-chat-completions --model_args model=gpt-4-turbo,base_url=[BASE_URL] --tasks yanolja_summarization`|
+|hf|As in the original lm-evaluation-harness, you can evaluate the huggingface's model or a local model checkpoint. |pretrained|yanolja_translation, yanolja_summarization, yanolja_perplexity|lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization|
+|translator|You can use various translators through Yanolja's Fragma API. See the documentation for the available translators.|api_key, target_lang, endpoint, model|yanolja_translation|`lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRAGMA_API_KEY],target_lang=en,endpoint=[FRAGMA_ENDPOINT],model=[FRAGMA_MODEL] --task_config doc_to_text="{{source}}"`|
+### Overwrite Prompt Template
+By default, the template prepared for each task is set to our local model. 
+```yaml
+doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
+Human: 주어진 한국어 문장을 영어로 번역해주세요. 번역된 문장은 영어로 시작해야 합니다.
+Korean: {{source}}
+Assistant: "
+```
+However, if you need to use the translate API, for example, you may need to change the template directly. In this case, you can change the prompt template in the commandline argument as shown below.
+```bash
+lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRAGMA_API_KEY],target_lang=en,endpoint=https://fragma.prod.yanolja.in/pre/translate,model=deepl --task_config doc_to_text="{{source}}"
+```
+
+### Local Model Endpoints (TBD)
+[LiteLLM](https://docs.litellm.ai/) allows you to evaluate models in the same way as OpenAI models, even for models that are not yet supported, such as gemini and mistral-large.
+
 ## Announcement
 **A new v0.4.0 release of lm-evaluation-harness is available** !
 

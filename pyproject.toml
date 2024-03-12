@@ -39,6 +39,9 @@ dependencies = [
     "dill",
     "word2number",
     "more_itertools",
+    "unbabel-comet",
+    "uptrain",
+    "bert_score"
 ]
 
 [tool.setuptools.packages.find]

@@ -28,7 +28,10 @@ class TaskManager:
 
         self.task_group_map = collections.defaultdict(list)
 
-        self.task_config = utils.simple_parse_args_string(task_config)
+        if task_config is not None:
+            self.task_config = utils.simple_parse_args_string(task_config)
+        else:
+            self.task_config = {}
 
     def initialize_tasks(self, include_path: Optional[str] = None):
         """Creates a dictionary of tasks index.

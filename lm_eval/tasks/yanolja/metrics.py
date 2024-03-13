@@ -153,5 +153,10 @@ def agg_llm_eval(items):
                  api_version=AZURE_API_VERSION,
                  azure_api_base=AZURE_ENDPOINT))
     response = eval_llm.evaluate(data, checks=[Evals.CRITIQUE_LANGUAGE])
-    print(response)
-    return response[0]["score_critique_language"]
+    # return sum([resp["score_critique_language"] for resp in response]) /len(response)
+    # uptrain 0.5.0 version has 4 type of scores, so gather them and average them
+    score_fluency = sum([resp["score_fluency"] for resp in response]) /len(response)
+    score_grammar = sum([resp["score_grammar"] for resp in response]) /len(response)
+    score_coherence = sum([resp["score_coherence"] for resp in response]) /len(response)
+    score_politeness = sum([resp["score_politeness"] for resp in response]) /len(response)
+    return (score_fluency + score_grammar + score_coherence + score_politeness) / 4 

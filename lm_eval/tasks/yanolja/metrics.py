@@ -7,7 +7,7 @@ from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 from BARTScore.bart_score import BARTScorer
 
-AZURE_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
+AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")
 
@@ -113,11 +113,19 @@ def agg_bartscore_src(items):
     predictions, sources, src_langs, tgt_langs = zip(*items)
     src_lang = src_langs[0]
     tgt_lang = tgt_langs[0]
+
+    # If other language is added, then 
+    lang_code_dict = {
+        "en": "en_XX",
+        "ko": "ko_KR",
+        "ja": "ja_XX",
+        "zh": "zh_CN"
+    }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     bart_scorer = BARTScorer(device=device,
                              checkpoint='facebook/mbart-large-50',
-                             src_lang=src_lang,
-                             tgt_lang=tgt_lang)
+                             src_lang=lang_code_dict[src_lang],
+                             tgt_lang=lang_code_dict[tgt_lang])
     
     # Calculate probability of predictions when sources are given as context
     scores = bart_scorer.score(sources, predictions)

@@ -5,6 +5,7 @@ import evaluate
 import torch
 from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
+from BARTScore.bart_score import BARTScorer
 
 AZURE_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
@@ -69,10 +70,6 @@ def agg_bleurt(items):
                          references=references)["scores"]
     return sum(output) / len(output)
 
-
-
-
-
 def cometkiwi22(predictions, references):
     try:
         prediction, source = predictions[0], json.loads(references[0])["source"]
@@ -100,6 +97,32 @@ def agg_cometkiwi22(items):
     # Prediction([('scores', [0.8676194548606873]), ('system_score', 0.8676194548606873)])
 
     return model_output[1]
+
+def bartscore_src(predictions, references):
+    try:
+        prediction, source = predictions[0], json.loads(references[0])["source"]
+        src_lang = json.loads(references[0])["source_lang"]
+        tgt_lang = json.loads(references[0])["target_lang"]
+    except:
+        print(references[0])
+        raise ValueError()
+
+    return (prediction, source, src_lang, tgt_lang)
+
+def agg_bartscore_src(items):
+    predictions, sources, src_langs, tgt_langs = zip(*items)
+    src_lang = src_langs[0]
+    tgt_lang = tgt_langs[0]
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    bart_scorer = BARTScorer(device=device,
+                             checkpoint='facebook/mbart-large-50',
+                             src_lang=src_lang,
+                             tgt_lang=tgt_lang)
+    
+    # Calculate probability of predictions when sources are given as context
+    scores = bart_scorer.score(sources, predictions)
+    
+    return sum(scores) / len(scores)
 
 
 def llm_eval(predictions, references):

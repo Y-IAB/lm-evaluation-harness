@@ -10,11 +10,11 @@ doc_to_text: "A chat between a curious user and an artificial intelligence assis
 Human: 주어진 한국어 text를 요약해주세요.
 text: {{text}}
 Assistant: "
-doc_to_target: '{"reference": "{{summary}}", "source": "{{text}}", "target_lang": "ko"}'
+doc_to_target: '{"reference": "{{summary}}", "source": "{{text}}", "source_lang": "ko", "target_lang": "ko"}'
 
 metric_list:
-  - metric: !function metrics.cometkiwi22
-    aggregation: !function metrics.agg_cometkiwi22
+  - metric: !function metrics.bartscore_src
+    aggregation: !function metrics.agg_bartscore_src
     higher_is_better: true
   - metric: !function metrics.llm_eval
     aggregation: !function metrics.agg_llm_eval

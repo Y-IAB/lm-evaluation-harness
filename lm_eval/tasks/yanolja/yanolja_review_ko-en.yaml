@@ -23,8 +23,6 @@ metric_list:
 
 generation_kwargs:
   until:
-    - "\n\n"
-    - "\n"
     - "<|im_end|>"
     - "</s>"
 metadata:

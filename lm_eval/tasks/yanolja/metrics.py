@@ -7,7 +7,7 @@ from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 from BARTScore.bart_score import BARTScorer
 
-AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
+AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")
 
@@ -142,21 +142,21 @@ def llm_eval(predictions, references):
 def agg_llm_eval(items):
     predictions, sources = zip(*items)
     data = [{"response": prediction} for prediction in predictions]
-    if not AZURE_API_KEY or not AZURE_API_VERSION or not AZURE_ENDPOINT:
+    if not AZURE_OPENAI_API_KEY or not AZURE_API_VERSION or not AZURE_ENDPOINT:
         raise ValueError(
-            "Please set the environment variables AZURE_API_KEY, AZURE_API_VERSION and AZURE_ENDPOINT"
+            "Please set the environment variables AZURE_OPENAI_API_KEY, AZURE_API_VERSION and AZURE_ENDPOINT"
         )
 
     eval_llm = EvalLLM(
         Settings(model='azure/gpt-4-turbo',
-                 azure_api_key=AZURE_API_KEY,
+                 azure_api_key=AZURE_OPENAI_API_KEY,
                  api_version=AZURE_API_VERSION,
                  azure_api_base=AZURE_ENDPOINT))
     response = eval_llm.evaluate(data, checks=[Evals.CRITIQUE_LANGUAGE])
     # return sum([resp["score_critique_language"] for resp in response]) /len(response)
     # uptrain 0.5.0 version has 4 type of scores, so gather them and average them
-    score_fluency = sum([resp["score_fluency"] for resp in response]) /len(response)
-    score_grammar = sum([resp["score_grammar"] for resp in response]) /len(response)
-    score_coherence = sum([resp["score_coherence"] for resp in response]) /len(response)
-    score_politeness = sum([resp["score_politeness"] for resp in response]) /len(response)
+    score_fluency = sum([resp["score_fluency"] if resp["score_fluency"] is not None else 0.0 for resp in response]) /len(response)
+    score_grammar = sum([resp["score_grammar"] if resp["score_grammar"] is not None else 0.0 for resp in response]) /len(response)
+    score_coherence = sum([resp["score_coherence"] if resp["score_coherence"] is not None else 0.0 for resp in response]) /len(response)
+    score_politeness = sum([resp["score_politeness"] if resp["score_politeness"] is not None else 0.0 for resp in response]) /len(response)
     return (score_fluency + score_grammar + score_coherence + score_politeness) / 4 

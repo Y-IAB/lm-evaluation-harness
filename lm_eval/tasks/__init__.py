@@ -156,12 +156,14 @@ class TaskManager:
             else:
                 config = self._process_alias(config, group=group)
                 task_object = ConfigurableTask(config=config)
-            if group is not None:
-                task_object = (group, task_object)
 
             for k, v in self.task_config.items():
                 self.logger.info(f"Updating task config: {k} = {v}")
                 task_object.config[k] = v
+
+            if group is not None:
+                task_object = (group, task_object)
+
 
             return {task: task_object}
 

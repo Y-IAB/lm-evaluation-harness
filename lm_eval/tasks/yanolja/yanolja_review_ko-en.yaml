@@ -11,7 +11,7 @@ doc_to_text: "A chat between a curious user and an artificial intelligence assis
 Human: 주어진 한국어 문장을 영어로 번역해주세요. 번역된 문장은 영어로 시작해야 합니다.
 Korean: {{source}}
 Assistant: "
-doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "target_lang": "en"}'
+doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "source_lang": "ko", "target_lang": "en"}'
 
 metric_list:
   - metric: !function metrics.cometkiwi22
@@ -23,8 +23,6 @@ metric_list:
 
 generation_kwargs:
   until:
-    - "\n\n"
-    - "\n"
     - "<|im_end|>"
     - "</s>"
 metadata:

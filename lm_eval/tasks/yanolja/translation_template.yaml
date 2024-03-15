@@ -7,7 +7,7 @@ Korean: {{source}}
 Assistant: "
 
 
-doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "target_lang": "en"}'
+doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "source_lang": "ko", "target_lang": "en"}'
 metric_list:
   - metric: !function metrics.bleu
     aggregation: !function metrics.agg_bleu
@@ -22,6 +22,10 @@ metric_list:
     aggregation: !function metrics.agg_bleurt
     higher_is_better: true
 
+generation_kwargs:
+  until:
+    - "<|im_end|>"
+    - "</s>"
 
 
 metadata:

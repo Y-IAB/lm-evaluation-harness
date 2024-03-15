@@ -28,7 +28,10 @@ class TaskManager:
 
         self.task_group_map = collections.defaultdict(list)
 
-        self.task_config = utils.simple_parse_args_string(task_config)
+        if task_config is not None:
+            self.task_config = utils.simple_parse_args_string(task_config)
+        else:
+            self.task_config = {}
 
     def initialize_tasks(self, include_path: Optional[str] = None):
         """Creates a dictionary of tasks index.
@@ -153,12 +156,14 @@ class TaskManager:
             else:
                 config = self._process_alias(config, group=group)
                 task_object = ConfigurableTask(config=config)
-            if group is not None:
-                task_object = (group, task_object)
 
             for k, v in self.task_config.items():
                 self.logger.info(f"Updating task config: {k} = {v}")
                 task_object.config[k] = v
+
+            if group is not None:
+                task_object = (group, task_object)
+
 
             return {task: task_object}
 

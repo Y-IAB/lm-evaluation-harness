@@ -6,11 +6,17 @@
 If you only want to evaluate your summarization/translation model for yanolja, then the only thing you need is to follow this guide and get evaluation results. 
 
 ### Installation
-To evaluate your model, you should install bleurt first.
+To evaluate your model, you should install bleurt and BARTScore first.
 ```bash
 pip install --upgrade pip  # ensures that pip is current
 git clone https://github.com/google-research/bleurt.git
 pip install ./bleurt
+```
+
+The BARTScore repository below is pip installable version of BARTScore with MBart (for supporting korean and so on).
+```bash
+git clone https://github.com/Y-IAB/BARTScore
+pip install -e ./BARTScore
 ```
 
 After that, please install this repository.

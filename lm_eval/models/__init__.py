@@ -1,6 +1,7 @@
 from . import (
     anthropic_llms,
     dummy,
+    fragma,
     gguf,
     huggingface,
     mamba_lm,

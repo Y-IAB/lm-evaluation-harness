@@ -23,7 +23,7 @@ After that, please install this repository.
 ```bash
 git clone https://github.com/Y-IAB/lm-evaluation-harness
 cd lm-evaluation-harness
-pip install -e .
+pip install -e .[openai]
 ```
 
 ### Dataset Setting

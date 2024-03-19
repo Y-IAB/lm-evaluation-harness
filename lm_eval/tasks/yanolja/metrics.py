@@ -90,13 +90,74 @@ def agg_cometkiwi22(items):
     model = load_from_checkpoint(model_path)
 
     model_output = model.predict(data,
-                                 batch_size=8,
-                                 gpus=torch.cuda.device_count())
+                                 batch_size=4,
+                                 gpus=1,
+                                 devices=[5])
 
     # Example output:
     # Prediction([('scores', [0.8676194548606873]), ('system_score', 0.8676194548606873)])
 
     return model_output[1]
+
+def cometkiwi23(predictions, references):
+    try:
+        prediction, source = predictions[0], json.loads(references[0])["source"]
+    except:
+        print(references[0])
+        raise ValueError()
+
+    return (prediction, source)
+
+def agg_cometkiwi23(items):
+    predictions, sources = zip(*items)
+
+    data = []
+    for prediction, source in zip(predictions, sources):
+        data.append({"src": source, "mt": prediction})
+
+    model_path = download_model("Unbabel/wmt23-cometkiwi-da-xl")
+    model = load_from_checkpoint(model_path)
+
+    model_output = model.predict(data,
+                                 batch_size=4,
+                                 gpus=1,
+                                 devices=[3])
+
+    # Example output:
+    # Prediction([('scores', [0.8676194548606873]), ('system_score', 0.8676194548606873)])
+
+    return model_output[1]
+
+
+def xcomet(predictions, references):
+    try:
+        prediction, source = predictions[0], json.loads(references[0])["source"]
+    except:
+        print(references[0])
+        raise ValueError()
+
+    return (prediction, source)
+
+def agg_xcomet(items):
+    predictions, sources = zip(*items)
+
+    data = []
+    for prediction, source in zip(predictions, sources):
+        data.append({"src": source, "mt": prediction})
+
+    model_path = download_model("Unbabel/XCOMET-XL")
+    model = load_from_checkpoint(model_path)
+
+    model_output = model.predict(data,
+                                 batch_size=4,
+                                 gpus=1,
+                                 devices=[4])
+
+    # Example output:
+    # Prediction([('scores', [0.8676194548606873]), ('system_score', 0.8676194548606873)])
+
+    return model_output[1]
+
 
 def bartscore_src(predictions, references):
     try:
@@ -121,7 +182,7 @@ def agg_bartscore_src(items):
         "ja": "ja_XX",
         "zh": "zh_CN"
     }
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
     bart_scorer = BARTScorer(device=device,
                              checkpoint='facebook/mbart-large-50',
                              src_lang=lang_code_dict[src_lang],

@@ -23,7 +23,15 @@ After that, please install this repository.
 ```bash
 git clone https://github.com/Y-IAB/lm-evaluation-harness
 cd lm-evaluation-harness
-pip install -e .
+pip install -e .[openai]
+```
+### Prerequisite
+Before you use this repository, you need to set some environment variables. Please set your environment variables with your key and endpoints.
+```bash
+export AZURE_OPENAI_API_KEY="..."
+export AZURE_API_VERSION="2023-12-01-preview"
+export AZURE_ENDPOINT ="....openai.azure.com"
+export AVAILABLE_GPUS=0,1,2,3,4,5
 ```
 
 ### Dataset Setting

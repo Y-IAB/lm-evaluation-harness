@@ -1,10 +1,11 @@
-task: yanolja_review_ko-en
-dataset_name: yanolja_review_ko-en
+# This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
+task: yanolja_inbound_ko-en
+dataset_name: yanolja_inbound_ko-en
 dataset_path: json
 dataset_kwargs:
-  data_files: ./data/yanolja_review_ko-en.jsonl
+  data_files: ./data/yanolja_inbound_ko-en.jsonl
 
-group: yanolja_translation_ko-en
+group: yanolja_translation_handmade_ko-en
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
@@ -14,6 +15,18 @@ Assistant: "
 doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "source_lang": "ko", "target_lang": "en"}'
 
 metric_list:
+  - metric: !function metrics.bleu
+    aggregation: !function metrics.agg_bleu
+    higher_is_better: true
+  - metric: !function metrics.rouge
+    aggregation: !function metrics.agg_rouge
+    higher_is_better: true
+  - metric: !function metrics.bertscore
+    aggregation: !function metrics.agg_bertscore
+    higher_is_better: true
+  - metric: !function metrics.bleurt
+    aggregation: !function metrics.agg_bleurt
+    higher_is_better: true
   - metric: !function metrics.cometkiwi22
     aggregation: !function metrics.agg_cometkiwi22
     higher_is_better: true

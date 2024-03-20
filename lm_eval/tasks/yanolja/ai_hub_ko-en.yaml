@@ -3,4 +3,4 @@ dataset_name: aihub_ko-en
 dataset_path: json
 dataset_kwargs:
   data_files: ./data/ai-hub-ko-en-1000.jsonl
-include: translation_template.yaml
+include: translation_template_ko-en.yaml

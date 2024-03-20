@@ -25,6 +25,14 @@ git clone https://github.com/Y-IAB/lm-evaluation-harness
 cd lm-evaluation-harness
 pip install -e .[openai]
 ```
+### Prerequisite
+Before you use this repository, you need to set some environment variables. Please set your environment variables with your key and endpoints.
+```bash
+AZURE_OPENAI_API_KEY="..."
+export AZURE_API_VERSION="2023-12-01-preview"
+export AZURE_ENDPOINT ="....openai.azure.com"
+AVAILABLE_GPUS=0,1,2,3,4,5
+```
 
 ### Dataset Setting
 Before you evaluate your models, you need to download dataset first. Please downlaod dataset from the [link](https://drive.google.com/file/d/1-CWu5E96mo9ub_-UsEXnX2JpIU9onaHN/view?usp=sharing) and drop the JSONL dataset files into `lm_eval/tasks/yanolja/data`.

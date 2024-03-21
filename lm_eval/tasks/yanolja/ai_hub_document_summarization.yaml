@@ -1,0 +1,6 @@
+task: aihub_document_ko
+dataset_name: aihub_document_ko
+dataset_path: json
+dataset_kwargs:
+  data_files: ./data/ai_hub_document_summarization.jsonl
+include: summarization_template.yaml

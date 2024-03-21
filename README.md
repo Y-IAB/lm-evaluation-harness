@@ -40,7 +40,7 @@ Before you evaluate your models, you need to download dataset first. Please down
 ### Basic Usage
 After that, you can evaluate summarization/translation quality for your model:
 ```bash
-lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization,yanolja_translation,yanolja_perplexity --limit 1000 --batch_size=auto
+lm_eval --model hf --model_args pretrained=yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --tasks yanolja_summarization,yanolja_translation_ko-en,yanolja_translation_en-ko,yanolja_perplexity --limit 1000 --batch_size=auto
 ```
 
 If you only want to evaluate summarization quality, then you can give only `yanolja_summarization` for `--tasks` argument.
@@ -53,7 +53,8 @@ The table shows the task groups we prepared in advance and their descriptions:
 |Task Name|Description|
 |---|---|
 |yanolja_summarization|This task group consists of various open-source summarization benchmarks (labeled) and real user input datasets from the yanolja reviewize service (unlabeled). The former are evaluated with reference-based metrics (BLEU, ROUGE, BLEURT, etc.), while the latter are evaluated with reference-free metrics (COMETKIWI, LLM Eval).|
-|yanolja_translation|This task group consists of various open-source translation benchmarks (labeled) and real user input datasets from the yanolja babel service (unlabeled). The former are evaluated with reference-based metrics (BLEU, ROUGE, BLEURT, etc.), while the latter are evaluated with reference-free metrics (COMETKIWI, LLM Eval).|
+|yanolja_translation|This task group consists of various open-source translation benchmarks (labeled) and real user input datasets from the yanolja babel service (unlabeled). The former are evaluated with reference-based metrics (BLEU, ROUGE, BLEURT, etc.), while the latter are evaluated with reference-free metrics (COMETKIWI, LLM Eval). Both direction (ko-en, en-ko) are supported.|
+|yanolja_translation_handmade|This task group consists of human-labeled translations for travel domain. Because this task group is the most important for our task, we evaluate this group with all of metrics. Both direction (ko-en, en-ko) are supported.|
 |yanolja_perplexity|This task group measures the perplexity of LLM on yonolja real English/Korean data. By doing so, we determine the similarity between LLM's knowledge and yanolja data domain.|
 
 ### Available Models

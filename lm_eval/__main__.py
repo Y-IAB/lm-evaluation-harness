@@ -307,6 +307,12 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         else:
             path.mkdir(parents=True, exist_ok=True)
 
+        # For logging outputs during aggregating metrics
+        os.environ["OUTPUT_PATH"] = args.output_path
+
+    else:
+        os.environ["OUTPUT_PATH"] = ""
+
     # Respect user's value passed in via CLI, otherwise default to True and add to comma-separated model args
     if args.trust_remote_code:
         os.environ["HF_DATASETS_TRUST_REMOTE_CODE"] = str(args.trust_remote_code)

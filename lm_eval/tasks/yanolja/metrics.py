@@ -6,10 +6,12 @@ import torch
 from comet import download_model, load_from_checkpoint
 from uptrain import CritiqueTone, EvalLLM, Evals, Settings
 from BARTScore.bart_score import BARTScorer
+from datetime import datetime
 
 AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 AZURE_API_VERSION = os.environ.get("AZURE_API_VERSION")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")
+OUTPUT_PATH = os.environ.get("OUTPUT_PATH")
 
 # Get available gpus from environment variable (e.g. AVAILABLE_GPUS=0,1,2,3,4,5)
 AVAILABLE_GPUS = os.environ.get("AVAILABLE_GPUS")
@@ -250,6 +252,14 @@ def agg_llm_eval(items):
                  api_version=AZURE_API_VERSION,
                  azure_api_base=AZURE_ENDPOINT))
     response = eval_llm.evaluate(data, checks=[Evals.CRITIQUE_LANGUAGE])
+    
+    # logging as json
+    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    with open(os.path.join(OUTPUT_PATH, "llm-eval_input_" + current_time + ".json"), 'w', encoding="utf-8") as f:
+        json.dump(sources, f, ensure_ascii=False)
+    with open(os.path.join(OUTPUT_PATH, "llm-eval_response_" + current_time + ".json"), 'w', encoding="utf-8") as f:
+        json.dump(response, f, ensure_ascii=False)
+
     # return sum([resp["score_critique_language"] for resp in response]) /len(response)
     # uptrain 0.5.0 version has 4 type of scores, so gather them and average them
     score_fluency = sum([resp["score_fluency"] if resp["score_fluency"] is not None else 0.0 for resp in response]) /len(response)

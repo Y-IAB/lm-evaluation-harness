@@ -24,6 +24,9 @@ metric_list:
   - metric: !function metrics.xcomet
     aggregation: !function metrics.agg_xcomet
     higher_is_better: true
+  - metric: !function metrics.bartscore_src
+    aggregation: !function metrics.agg_bartscore_src
+    higher_is_better: true
   - metric: !function metrics.llm_eval
     aggregation: !function metrics.agg_llm_eval
     higher_is_better: true

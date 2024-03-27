@@ -25,12 +25,13 @@ git clone https://github.com/Y-IAB/lm-evaluation-harness
 cd lm-evaluation-harness
 pip install -e .[openai]
 ```
+
 ### Prerequisite
 Before you use this repository, you need to set some environment variables. Please set your environment variables with your key and endpoints.
 ```bash
 export AZURE_OPENAI_API_KEY="..."
 export AZURE_API_VERSION="2023-12-01-preview"
-export AZURE_ENDPOINT ="....openai.azure.com"
+export AZURE_ENDPOINT="....openai.azure.com"
 export AVAILABLE_GPUS=0,1,2,3,4,5
 ```
 
@@ -73,7 +74,7 @@ Human: 주어진 한국어 문장을 영어로 번역해주세요. 번역된 문
 Korean: {{source}}
 Assistant: "
 ```
-However, if you need to use the translate API, for example, you may need to change the template directly. In this case, you can change the prompt template in the commandline argument as shown below.
+However, if you need to use the translate API, for example, you may need to change the template directly. In this case, you can change the prompt template in the command line argument as shown below.
 ```bash
 lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRAGMA_API_KEY],target_lang=en,endpoint=https://fragma.prod.yanolja.in/pre/translate,model=deepl --task_config doc_to_text="{{source}}"
 ```
@@ -81,7 +82,7 @@ lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRA
 
 
 ### Local Model Endpoints (TBD)
-[LiteLLM](https://docs.litellm.ai/) allows you to evaluate models in the same way as OpenAI models, even for models that are not yet supported, such as gemini and mistral-large.
+[LiteLLM](https://docs.litellm.ai/) allows you to evaluate models in the same way as OpenAI models, even for models that are not yet supported, such as Gemini and mistral-large.
 
 ## Announcement
 **A new v0.4.0 release of lm-evaluation-harness is available** !
@@ -92,7 +93,7 @@ New updates and features include:
 - Config-based task creation and configuration
 - Easier import and sharing of externally-defined task config YAMLs
 - Support for Jinja2 prompt design, easy modification of prompts + prompt imports from Promptsource
-- More advanced configuration options, including output post-processing, answer extraction, and multiple LM generations per document, configurable fewshot settings, and more
+- More advanced configuration options, including output post-processing, answer extraction, and multiple LM generations per document, configurable few-shot settings, and more
 - Speedups and new modeling libraries supported, including: faster data-parallel HF model usage, vLLM support, MPS support with HuggingFace, and more
 - Logging and usability changes
 - New tasks including CoT BIG-Bench-Hard, Belebele, user-defined task groupings, and more

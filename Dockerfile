@@ -27,7 +27,7 @@ RUN git clone --depth=1 https://github.com/Y-IAB/BARTScore && pip install -e ./B
 RUN git clone --depth=1 https://github.com/Y-IAB/lm-evaluation-harness && pip install -e ./lm-evaluation-harness[openai]
 
 WORKDIR /workspace/lm-evaluation-harness/lm_eval/tasks/yanolja/data
-RUN gcloud storage cp gs://puree/lm-eval-harness/dataset.tar.gz && \
+RUN gcloud storage cp gs://puree/lm-eval-harness/dataset.tar.gz dataset.tar.gz && \
     tar -xzf dataset.tar.gz
 
 WORKDIR /workspace/lm-evaluation-harness

@@ -1,6 +1,4 @@
 task: elrc-ko-en
 dataset_name: elrc_ko-en
-dataset_path: json
-dataset_kwargs:
-  data_files: ./data/ELRC_translation_ko-en.jsonl
+dataset_path: puree://Oph0bAe8YjBXy2m9PvFX
 include: translation_template_ko-en.yaml

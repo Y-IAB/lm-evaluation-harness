@@ -5,7 +5,9 @@ dataset_path: json
 dataset_kwargs:
   data_files: ./data/yanolja_triple_short_ko-ja.jsonl
 
-group: yanolja_translation_handmade_ja-ko
+group: 
+  - yanolja_translation_handmade_ja-ko
+  - yatrans_hm_ja-ko
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.

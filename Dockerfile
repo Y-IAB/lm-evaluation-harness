@@ -33,3 +33,5 @@ RUN gcloud storage cp gs://puree/lm-eval-harness/dataset.tar.gz dataset.tar.gz &
 WORKDIR /workspace/lm-evaluation-harness
 RUN git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && \
     git config --get remote.origin.fetch
+
+RUN git config --global credential.helper store

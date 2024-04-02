@@ -41,7 +41,8 @@ dependencies = [
     "more_itertools",
     "unbabel-comet",
     "uptrain==0.5.0",
-    "bert_score"
+    "bert_score",
+    "gcsfs"
 ]
 
 [tool.setuptools.packages.find]

@@ -1,4 +1,6 @@
 task: mdn_en-ko
 dataset_name: mdn_en-ko
-dataset_path: puree://ohgvC3elEgRFxvUXDkWe
+dataset_path: json
+dataset_kwargs:
+  data_files: ./data/MDN_translation_length_20_ko-en.jsonl
 include: translation_template_en-ko.yaml

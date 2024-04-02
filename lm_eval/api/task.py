@@ -273,7 +273,7 @@ class Task(abc.ABC):
 
     def _download_puree_dataset(self) -> None:
         """Download dataset from Puree"""
-        dataset_id = self.DATASET_PATH.path.split("://")[1]
+        dataset_id = self.DATASET_PATH.split("://")[1]
         data_files = f"gs://puree/datasets/{dataset_id}/*.parquet"
         self.dataset = datasets.load_dataset(
             "parquet",

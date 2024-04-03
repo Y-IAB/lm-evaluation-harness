@@ -5,7 +5,9 @@ dataset_path: json
 dataset_kwargs:
   data_files: puree://egtRgkubNzlxiE06c5zL 
 
-group: yanolja_translation_handmade_ko-en
+group: 
+  - yanolja_translation_handmade_ko-en
+  - yatrans_hm_ko-en
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.

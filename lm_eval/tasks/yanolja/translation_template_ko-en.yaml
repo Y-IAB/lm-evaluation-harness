@@ -1,4 +1,9 @@
-group: yanolja_translation_ko-en
+group: 
+  - yanolja_translation_ko-en
+  - yatrans_ko-en
+  - yanolja_translation_simple_ko-en
+  - yatrans_s_ko-en
+
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.

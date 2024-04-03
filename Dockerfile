@@ -5,6 +5,7 @@ ARG PYTHON_VERSION="3.10"
 
 FROM nvidia/cuda:$CUDA_VERSION-cudnn$CUDNN_VERSION-devel-ubuntu$UBUNTU_VERSION
 
+ENV PYTHON_VERSION=$PYTHON_VERSION
 ENV PATH="/root/miniconda3/bin:${PATH}"
 
 RUN apt-get update \

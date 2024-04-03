@@ -1,11 +1,13 @@
 # This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
-task: yanolja_inbound_en-ko
-dataset_name: yanolja_inbound_en-ko
+task: yanolja_review_simple_en-ko
+dataset_name: yanolja_review_en-ko
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://egtRgkubNzlxiE06c5zL
+  data_files: puree://uWPc2Nwlfegmu933x1ms 
 
-group: yanolja_translation_handmade_en-ko
+group: 
+  - yanolja_translation_simple_en-ko
+  - yatrans_s_en-ko
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
@@ -15,18 +17,6 @@ Assistant: "
 doc_to_target: '{"reference": "{{source}}", "source": "{{target}}", "source_lang": "en", "target_lang": "ko"}'
 
 metric_list:
-  - metric: !function metrics.bleu
-    aggregation: !function metrics.agg_bleu
-    higher_is_better: true
-  - metric: !function metrics.rouge
-    aggregation: !function metrics.agg_rouge
-    higher_is_better: true
-  - metric: !function metrics.bertscore
-    aggregation: !function metrics.agg_bertscore
-    higher_is_better: true
-  - metric: !function metrics.bleurt
-    aggregation: !function metrics.agg_bleurt
-    higher_is_better: true
   - metric: !function metrics.cometkiwi22
     aggregation: !function metrics.agg_cometkiwi22
     higher_is_better: true
@@ -35,9 +25,6 @@ metric_list:
     higher_is_better: true
   - metric: !function metrics.xcomet
     aggregation: !function metrics.agg_xcomet
-    higher_is_better: true
-  - metric: !function metrics.llm_eval
-    aggregation: !function metrics.agg_llm_eval
     higher_is_better: true
 
 generation_kwargs:

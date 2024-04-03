@@ -1,18 +1,20 @@
 # This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
-task: yanolja_inbound_en-ko
-dataset_name: yanolja_inbound_en-ko
+task: yanolja_triple_long_ko-ja
+dataset_name: yanolja_triple_long_ko-ja
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://egtRgkubNzlxiE06c5zL
+  data_files: puree://Zw7rCFbmxDJShjT3mLXd
 
-group: yanolja_translation_handmade_en-ko
+group: 
+  - yanolja_translation_handmade_ko-ja
+  - yatrans_hm_ko-ja
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
-Human: 주어진 영어 문장을 한국어로 번역해주세요. 번역된 문장은 한국어로 시작해야 합니다.
-English: {{target}}
+Human: 与えられた韓国語の文章を日本語に翻訳してください。 翻訳された文章は日本語で始まる必要があります。
+Korean: {{source}}
 Assistant: "
-doc_to_target: '{"reference": "{{source}}", "source": "{{target}}", "source_lang": "en", "target_lang": "ko"}'
+doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "source_lang": "ko", "target_lang": "ja"}'
 
 metric_list:
   - metric: !function metrics.bleu

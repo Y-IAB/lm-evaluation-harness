@@ -1,11 +1,13 @@
 # This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
-task: yanolja_inbound_en-ko
+task: yanolja_inbound_simple_en-ko
 dataset_name: yanolja_inbound_en-ko
 dataset_path: json
 dataset_kwargs:
   data_files: puree://egtRgkubNzlxiE06c5zL
 
-group: yanolja_translation_handmade_en-ko
+group: 
+  - yanolja_translation_handmade_simple_en-ko
+  - yatrans_hm_s_en-ko
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
@@ -35,9 +37,6 @@ metric_list:
     higher_is_better: true
   - metric: !function metrics.xcomet
     aggregation: !function metrics.agg_xcomet
-    higher_is_better: true
-  - metric: !function metrics.llm_eval
-    aggregation: !function metrics.agg_llm_eval
     higher_is_better: true
 
 generation_kwargs:

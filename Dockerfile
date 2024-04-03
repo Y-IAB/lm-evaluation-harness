@@ -26,10 +26,6 @@ RUN git clone --depth=1 https://github.com/google-research/bleurt.git && pip ins
 RUN git clone --depth=1 https://github.com/Y-IAB/BARTScore && pip install -e ./BARTScore
 RUN git clone --depth=1 https://github.com/Y-IAB/lm-evaluation-harness && pip install -e ./lm-evaluation-harness[openai]
 
-WORKDIR /workspace/lm-evaluation-harness/lm_eval/tasks/yanolja/data
-RUN gcloud storage cp gs://puree/lm-eval-harness/dataset.tar.gz dataset.tar.gz && \
-    tar -xzf dataset.tar.gz
-
 WORKDIR /workspace/lm-evaluation-harness
 RUN git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && \
     git config --get remote.origin.fetch

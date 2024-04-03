@@ -1,22 +1,34 @@
 # This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
-task: yanolja_review_en-ko
-dataset_name: yanolja_review_en-ko
+task: yanolja_triple_short_ko-ja
+dataset_name: yanolja_triple_short_ko-ja
 dataset_path: json
 dataset_kwargs:
-  data_files: ./data/yanolja_review_en-ko.jsonl
+  data_files: ./data/yanolja_triple_short_ko-ja.jsonl
 
 group: 
-  - yanolja_translation_en-ko
-  - yatrans_en-ko
+  - yanolja_translation_handmade_ko-ja
+  - yatrans_hm_ko-ja
 output_type: generate_until
 test_split: train
 doc_to_text: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful and concise answers to the user's questions.
-Human: 주어진 영어 문장을 한국어로 번역해주세요. 번역된 문장은 한국어로 시작해야 합니다.
-English: {{target}}
+Human: 与えられた韓国語の文章を日本語に翻訳してください。 翻訳された文章は日本語で始まる必要があります。
+Korean: {{source}}
 Assistant: "
-doc_to_target: '{"reference": "{{source}}", "source": "{{target}}", "source_lang": "en", "target_lang": "ko"}'
+doc_to_target: '{"reference": "{{target}}", "source": "{{source}}", "source_lang": "ko", "target_lang": "ja"}'
 
 metric_list:
+  - metric: !function metrics.bleu
+    aggregation: !function metrics.agg_bleu
+    higher_is_better: true
+  - metric: !function metrics.rouge
+    aggregation: !function metrics.agg_rouge
+    higher_is_better: true
+  - metric: !function metrics.bertscore
+    aggregation: !function metrics.agg_bertscore
+    higher_is_better: true
+  - metric: !function metrics.bleurt
+    aggregation: !function metrics.agg_bleurt
+    higher_is_better: true
   - metric: !function metrics.cometkiwi22
     aggregation: !function metrics.agg_cometkiwi22
     higher_is_better: true

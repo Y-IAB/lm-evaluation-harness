@@ -1,5 +1,5 @@
 # This file targets to another dataset because there is no references in dataset, so source and target is exactly same.
-task: yanolja_inbound_ja-ko
+task: yanolja_inbound_simple_ja-ko
 dataset_name: yanolja_inbound_ja-ko
 dataset_path: json
 dataset_kwargs:

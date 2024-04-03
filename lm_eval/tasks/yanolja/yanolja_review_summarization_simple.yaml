@@ -1,4 +1,4 @@
-task: yanolja_review_ko
+task: yanolja_review_simple_ko
 dataset_name: yanolja_review_ko
 dataset_path: json
 dataset_kwargs:

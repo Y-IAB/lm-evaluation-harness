@@ -20,7 +20,7 @@ class Fragma(LM):
 
         self.endpoint = endpoint
         self.headers = {
-            "Authorization": api_key,
+            "api-key": api_key,
             'Content-Type': 'application/json'
         }
 

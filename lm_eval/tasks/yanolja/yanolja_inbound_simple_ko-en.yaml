@@ -3,7 +3,7 @@ task: yanolja_inbound_simple_ko-en
 dataset_name: yanolja_inbound_ko-en
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://egtRgkubNzlxiE06c5zL
+  dataset_path: puree://egtRgkubNzlxiE06c5zL
 
 group: 
   - yanolja_translation_handmade_simple_ko-en

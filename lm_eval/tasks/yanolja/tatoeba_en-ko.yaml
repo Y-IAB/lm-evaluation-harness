@@ -2,5 +2,5 @@ task: tatoeba_en-ko
 dataset_name: tatoeba_en-ko
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://rn5ebxa8VPgxTx5JUM8A
+  dataset_path: puree://rn5ebxa8VPgxTx5JUM8A
 include: translation_template_en-ko.yaml

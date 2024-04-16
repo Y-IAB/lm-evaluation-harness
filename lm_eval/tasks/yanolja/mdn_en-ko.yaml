@@ -2,5 +2,5 @@ task: mdn_en-ko
 dataset_name: mdn_en-ko
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://XRJ2QZS5IOq0lMYb5VwD
+  dataset_path: puree://XRJ2QZS5IOq0lMYb5VwD
 include: translation_template_en-ko.yaml

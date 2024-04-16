@@ -3,7 +3,7 @@ task: yanolja_triple_long_simple_ja-ko
 dataset_name: yanolja_triple_long_ja-ko
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://Zw7rCFbmxDJShjT3mLXd
+  dataset_path: puree://Zw7rCFbmxDJShjT3mLXd
 
 group: 
   - yanolja_translation_handmade_simple_ja-ko

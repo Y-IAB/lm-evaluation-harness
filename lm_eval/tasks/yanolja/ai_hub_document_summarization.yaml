@@ -2,5 +2,5 @@ task: aihub_document_ko
 dataset_name: aihub_document_ko
 dataset_path: json
 dataset_kwargs:
-  data_files: puree://8sTSUUwcmXK8UgapPiuw 
+  dataset_path: puree://8sTSUUwcmXK8UgapPiuw 
 include: summarization_template.yaml

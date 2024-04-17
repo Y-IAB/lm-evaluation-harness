@@ -20,6 +20,7 @@ from typing import (
     Union,
 )
 
+import json
 import datasets
 import numpy as np
 from tqdm import tqdm
@@ -376,6 +377,17 @@ class Task(abc.ABC):
     def doc_to_target(self, doc):
         pass
 
+    # convert all values of doc into json that key is "text"
+    def jsonize(self, doc):
+        if isinstance(doc, dict):
+            return {k: self.jsonize(v) for k, v in doc.items()}
+        elif isinstance(doc, list):
+            return [self.jsonize(v) for v in doc]
+        elif isinstance(doc, str):
+            return json.dumps({"text": doc}, ensure_ascii=False)
+        else:
+            return doc
+    
     def build_all_requests(
         self,
         *,
@@ -384,6 +396,7 @@ class Task(abc.ABC):
         world_size=None,
         cache_requests=False,
         rewrite_requests_cache=False,
+        json_mode=False,
     ) -> None:
         """Build a set of Instances for a task, and store them in task.instances"""
 
@@ -428,15 +441,16 @@ class Task(abc.ABC):
             doc_id_docs,
             total=num_docs,
         ):
+            jsonized_doc = self.jsonize(doc) if json_mode else doc
             # sample fewshot context #TODO: need to offset doc_id by rank now!
             fewshot_ctx = self.fewshot_context(
-                doc,
+                jsonized_doc,
                 0 if self.config.num_fewshot is None else self.config.num_fewshot,
             )
 
             # TODO: we should override self.config.repeats if doing greedy gen so users don't waste time+compute
             inst = self.construct_requests(
-                doc=doc,
+                doc=jsonized_doc,
                 ctx=fewshot_ctx,
                 metadata=(self.config["task"], doc_id, self.config.repeats),
             )

@@ -42,18 +42,30 @@ class Fragma(LM):
                     }
                 ]
             }
+            max_attempts = 10
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    response = requests.post(self.endpoint,
+                                             headers=self.headers,
+                                             json=data)
 
-            response = requests.post(self.endpoint,
-                                     headers=self.headers,
-                                     json=data)
+                    if response.status_code != 200:
+                        print(f"An error occurred while generating: {response.text}")
+                        raise Exception(response.text)
 
-            if response.status_code != 200:
-                print(f"An error occurred while generating: {response.text}")
-                raise Exception(response.text)
+                    result = response.json()
+                    results.append(result['choices'][0]['message']["content"])
+                    attempts = 0
+                    break
+                except Exception as e:
+                    attempts += 1
+                    print("error occured. retrying...")
+                    continue
 
-            result = response.json()
-            results.append(result['choices'][0]['message']["content"])
-
+            if attempts == max_attempts:
+                print("maximum retries occured. Insert dummy result...")
+                results.append("dummy text")
         return results
 
     def loglikelihood(self, reqs: list[Instance]) -> list[tuple[float, bool]]:

@@ -221,7 +221,10 @@ class Task(abc.ABC):
             - `datasets.DownloadMode.FORCE_REDOWNLOAD`
                 Fresh download and fresh dataset.
         """
-        self.download(data_dir, cache_dir, download_mode)
+        if self.DATASET_PATH.startswith("puree://"):
+            self._download_puree_dataset()
+        else:
+            self.download(data_dir, cache_dir, download_mode)
         self._training_docs: Optional[list] = None
         self._fewshot_docs: Optional[list] = None
         self._instances: Optional[List[Instance]] = None
@@ -266,6 +269,17 @@ class Task(abc.ABC):
             data_dir=data_dir,
             cache_dir=cache_dir,
             download_mode=download_mode,
+        )
+
+    def _download_puree_dataset(self) -> None:
+        """Download dataset from Puree"""
+        dataset_id = self.DATASET_PATH.split("://")[1]
+        data_files = f"gs://puree/datasets/{dataset_id}/*.parquet"
+        self.dataset = datasets.load_dataset(
+            "parquet",
+            name=self.DATASET_NAME,
+            data_files=data_files,
+            storage_options={"token": None},
         )
 
     @property
@@ -779,7 +793,10 @@ class ConfigurableTask(Task):
                     )
                     self._higher_is_better[metric_name] = is_higher_better(metric_name)
 
-        self.download(self.config.dataset_kwargs)
+        if self.DATASET_PATH.startswith("puree://"):
+            self._download_puree_dataset()
+        else:
+            self.download(self.config.dataset_kwargs)
         self._training_docs = None
         self._fewshot_docs = None
 

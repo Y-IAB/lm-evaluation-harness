@@ -51,10 +51,7 @@ class Translator(LM):
                     response = requests.post(self.endpoint,
                                              headers=self.headers,
                                              json=data)
-
-                    if response.status_code != 200:
-                        print(f"An error occurred while generating: {response.text}")
-                        raise Exception(response.text)
+                    response.raise_for_status()
 
                     result = response.json()
                     results.append(result['choices'][0]['message']["content"])
@@ -62,6 +59,7 @@ class Translator(LM):
                     break
                 except Exception as e:
                     attempts += 1
+                    print(e)
                     print("error occured. retrying...")
                     continue
 

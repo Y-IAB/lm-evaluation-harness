@@ -54,7 +54,6 @@ class Fragma(LM):
 
                     result = response.json()
                     results.append(result['choices'][0]['message']["content"])
-                    attempts = 0
                     break
                 except Exception as e:
                     attempts += 1

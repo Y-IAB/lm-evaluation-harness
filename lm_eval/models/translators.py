@@ -44,18 +44,27 @@ class Translator(LM):
                 "target_lang": self.target_lang,
                 "model": self.model
             }
+            max_attempts = 10
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    response = requests.post(self.endpoint,
+                                             headers=self.headers,
+                                             json=data)
+                    response.raise_for_status()
 
-            response = requests.post(self.endpoint,
-                                     headers=self.headers,
-                                     json=data)
+                    result = response.json()
+                    results.append(result['choices'][0]['message']["content"])
+                    break
+                except Exception as e:
+                    attempts += 1
+                    print(e)
+                    print("error occured. retrying...")
+                    continue
 
-            if response.status_code != 200:
-                print(f"An error occurred while translating: {response.text}")
-                raise Exception(response.text)
-
-            result = response.json()
-            results.append(result['translations'][0]['text'])
-
+            if attempts == max_attempts:
+                print("maximum retries occured. Insert dummy result...")
+                results.append("dummy text")
         return results
 
     def _convert_lang_to_code(self, lang: str) -> str:

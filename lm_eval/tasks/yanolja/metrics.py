@@ -267,3 +267,4 @@ def agg_llm_eval(items):
     score_coherence = sum([resp["score_coherence"] if resp["score_coherence"] is not None else 0.0 for resp in response]) /len(response)
     score_politeness = sum([resp["score_politeness"] if resp["score_politeness"] is not None else 0.0 for resp in response]) /len(response)
     return (score_fluency + score_grammar + score_coherence + score_politeness) / 4 
+

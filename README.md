@@ -35,8 +35,11 @@ export AZURE_ENDPOINT="....openai.azure.com"
 export AVAILABLE_GPUS=0,1,2,3,4,5
 ```
 
-### Dataset Setting
-Before you evaluate your models, you need to download dataset first. Please download dataset from the [link]([https://drive.google.com/file/d/1-CWu5E96mo9ub_-UsEXnX2JpIU9onaHN/view?usp=sharing](https://drive.google.com/file/d/1nUqTMr72QMEEBXCX1Un1AlFoWcuaWSvm/view?usp=sharing) and drop the JSONL dataset files into `lm_eval/tasks/yanolja/data`.
+Also, Before using Puree dataset, you need to configure GCP credential for you machine. There are several options to do it:
+- Automatically through Google CLI ([Instruction](https://cloud.google.com/docs/authentication/provide-credentials-adc#google-idp))
+- Manually, by downloading service account credential:
+  - Download a service account credential from [here](https://console.cloud.google.com/iam-admin/serviceaccounts/details/107823799478031745980/keys?organizationId=989139104574&project=special-tf-prod)
+  - Move the credential into `~/.config/gcloud/application_default_credentials.json`
 
 ### Basic Usage
 After that, you can evaluate summarization/translation quality for your model:
@@ -79,13 +82,7 @@ However, if you need to use the translate API, for example, you may need to chan
 lm_eval --model translator --tasks yanolja_translation --model_args api_key=[FRAGMA_API_KEY],target_lang=en,endpoint=https://fragma.prod.yanolja.in/pre/translate,model=deepl --task_config doc_to_text="{{source}}"
 ```
 
-### Puree Datasets
-Before using Puree dataset, you need to configure GCP credential for you machine. There are several options to do it:
-- Automatically through Google CLI ([Instruction](https://cloud.google.com/docs/authentication/provide-credentials-adc#google-idp))
-- Manually, by downloading service account credential:
-  - Download a service account credential from [here](https://console.cloud.google.com/iam-admin/serviceaccounts/details/107823799478031745980/keys?organizationId=989139104574&project=special-tf-prod)
-  - Move the credential into `~/.config/gcloud/application_default_credentials.json`
-
+### Add tasks with Puree Datasets
 
 To use a Puree dataset on evaluation, you can pass Puree dataset URI on `dataset_path`. The URI has `puree://<dataset-id>` format, and you can find the `dataset-id` from Puree dataset detail page URL.
 

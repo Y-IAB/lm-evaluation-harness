@@ -2,7 +2,7 @@ task: yanolja_review_ko-en
 dataset_name: yanolja_review_ko-en
 dataset_path: json
 dataset_kwargs:
-  data_files: ./data/yanolja_review_ko-en.jsonl
+  dataset_path: puree://uWPc2Nwlfegmu933x1ms 
 
 group: 
   - yanolja_translation_ko-en

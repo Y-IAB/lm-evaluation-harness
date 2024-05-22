@@ -2,5 +2,5 @@ task: aihub_en-ko
 dataset_name: aihub_en-ko
 dataset_path: json
 dataset_kwargs:
-  data_files: ./data/ai-hub-ko-en-1000.jsonl
+  dataset_path: puree://tsDsaNUykLsKnrTlXtbT 
 include: translation_template_en-ko.yaml

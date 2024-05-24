@@ -1,10 +1,10 @@
 def translation_mc_get_prompt_ko_en(doc: dict) -> str:
     return f"""You are a helpful AI assistant that is translating Korean to English. The Korean text is given below. Please start the translated text in English.
-    Korean: {dict["segments"]["source"]}"""
+    Korean: {doc["segments"]["sourceText"]}"""
 
 def translation_mc_get_prompt_en_ko(doc: dict) -> str:
     return f"""You are a helpful AI assistant that is translating English to Korean. The English text is given below. Please start the translated text in Korean.
-    English: {dict["segments"]["source"]}"""
+    English: {doc["segments"]["sourceText"]}"""
 
 def translation_mc_get_answer_idx(doc: dict) -> str:
     return f"""{doc["segments"]["targetText"]}"""

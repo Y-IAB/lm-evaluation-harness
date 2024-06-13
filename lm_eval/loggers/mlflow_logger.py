@@ -30,10 +30,25 @@ class MlflowLogger:
 
         self.mlflow_args: Dict[str, Any] = kwargs
 
+        # set the tracking uri if specified
+        tracking_uri = self.mlflow_args.pop("tracking_uri", None)
+        if tracking_uri:
+            mlflow.set_tracking_uri(tracking_uri)
+
+        # checks and creates an experiment if experiment_name is specified and does not exist
+        experiment_name = self.mlflow_args.pop("experiment_name", None)
+        experiment_id = None
+        if experiment_name:
+            experiment = mlflow.get_experiment_by_name(experiment_name)
+            if experiment is not None:
+                experiment_id = experiment.experiment_id
+            else:
+                experiment_id = mlflow.create_experiment(experiment_name)
+
         # initialize a W&B run
         self.run = mlflow.active_run()
         if self.run is None:
-            self.run = mlflow.start_run(**self.mlflow_args)
+            self.run = mlflow.start_run(experiment_id=experiment_id, **self.mlflow_args)
 
     def post_init(self, results: Dict[str, Any]) -> None:
         self.results: Dict[str, Any] = copy.deepcopy(results)

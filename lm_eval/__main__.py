@@ -273,8 +273,8 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
     if args.wandb_args:
         wandb_logger = WandbLogger(**simple_parse_args_string(args.wandb_args))
 
-    if args.mlfow_args:
-        mlfow_logger = MlflowLogger(**simple_parse_args_string(args.mlfow_args))
+    if args.mlflow_args:
+        mlfow_logger = MlflowLogger(**simple_parse_args_string(args.mlflow_args))
 
     eval_logger = utils.eval_logger
     eval_logger.setLevel(getattr(logging, f"{args.verbosity}"))
@@ -425,7 +425,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
                 eval_logger.info(f"Logging to Weights and Biases failed due to {e}")
 
         # Add MLFlow logging
-        if args.mlfow_args:
+        if args.mlflow_args:
             try:
                 mlfow_logger.post_init(results)
                 mlfow_logger.log_eval_result()
@@ -462,7 +462,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
             # Tear down wandb run once all the logging is done.
             wandb_logger.run.finish()
 
-        if args.mlfow_args:
+        if args.mlflow_args:
             # Tear down mlflow run once all the logging is done.
             mlfow_logger.finish()
 

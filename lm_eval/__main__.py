@@ -8,7 +8,7 @@ from typing import Union
 
 from lm_eval import evaluator, utils
 from lm_eval.evaluator import request_caching_arg_to_dict
-from lm_eval.loggers import EvaluationTracker, WandbLogger
+from lm_eval.loggers import EvaluationTracker, MlflowLogger, WandbLogger
 from lm_eval.tasks import TaskManager
 from lm_eval.utils import handle_non_serializable, make_table, simple_parse_args_string
 
@@ -217,6 +217,12 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Comma separated string arguments passed to wandb.init, e.g. `project=lm-eval,job_type=eval",
     )
     parser.add_argument(
+        "--mlflow_args",
+        type=str,
+        default="",
+        help="Comma separated string arguments for mlflow, e.g. `project=lm-eval,job_type=eval",
+    )
+    parser.add_argument(
         "--hf_hub_log_args",
         type=str,
         default="",
@@ -266,6 +272,9 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
 
     if args.wandb_args:
         wandb_logger = WandbLogger(**simple_parse_args_string(args.wandb_args))
+
+    if args.mlfow_args:
+        mlfow_logger = MlflowLogger(**simple_parse_args_string(args.mlfow_args))
 
     eval_logger = utils.eval_logger
     eval_logger.setLevel(getattr(logging, f"{args.verbosity}"))
@@ -415,6 +424,16 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
             except Exception as e:
                 eval_logger.info(f"Logging to Weights and Biases failed due to {e}")
 
+        # Add MLFlow logging
+        if args.mlfow_args:
+            try:
+                mlfow_logger.post_init(results)
+                mlfow_logger.log_eval_result()
+                if args.log_samples:
+                    mlfow_logger.log_eval_samples(samples)
+            except Exception as e:
+                eval_logger.info(f"Logging to MLFlow failed due to {e}")
+
         evaluation_tracker.save_results_aggregated(
             results=results, samples=samples if args.log_samples else None
         )
@@ -442,6 +461,10 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         if args.wandb_args:
             # Tear down wandb run once all the logging is done.
             wandb_logger.run.finish()
+
+        if args.mlfow_args:
+            # Tear down mlflow run once all the logging is done.
+            mlfow_logger.finish()
 
 
 if __name__ == "__main__":

@@ -1,14 +1,11 @@
 import copy
-import json
 import logging
-import tempfile
-from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
 
-from lm_eval.loggers.utils import _handle_non_serializable, remove_none_pattern
+from lm_eval.loggers.utils import remove_none_pattern
 
 
 logger = logging.getLogger(__name__)
@@ -166,19 +163,6 @@ class MlflowLogger:
             table = make_table(["Groups"] + columns, "groups")
             mlflow.log_table(table, "evaluation/group_eval_results.json")
 
-    def _log_results_as_artifact(self) -> None:
-        """Log results as JSON artifact to W&B."""
-        import mlflow
-
-        dumped = json.dumps(
-            self.results, indent=2, default=_handle_non_serializable, ensure_ascii=False
-        )
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            path = Path(tmp_dir, "results.json")
-            path.write_text(dumped, encoding="utf-8")
-            mlflow.log_artifact(path)
-
     def log_eval_result(self) -> None:
         """Log evaluation results to W&B."""
         # Log configs to wandb
@@ -190,13 +174,13 @@ class MlflowLogger:
 
         summary, mlflow_results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
-        mlflow.log_table(summary, "summary.json")
+        print(summary)
         print(mlflow_results)
         # mlflow.log_table(self.mlflow_results, "mlflow_results.json")
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()
         # Log the results dict as json to W&B Artifacts
-        self._log_results_as_artifact()
+        mlflow.log_table(self.results, "results.json")
 
     def _generate_dataset(
         self, data: List[Dict[str, Any]], config: Dict[str, Any]
@@ -289,24 +273,6 @@ class MlflowLogger:
 
         return pd.DataFrame(df_data)
 
-    def _log_samples_as_artifact(
-        self, data: List[Dict[str, Any]], task_name: str
-    ) -> None:
-        import mlflow
-
-        # log the samples as an artifact
-        dumped = json.dumps(
-            data,
-            indent=2,
-            default=_handle_non_serializable,
-            ensure_ascii=False,
-        )
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            path = Path(tmp_dir, f"{task_name}_eval_samples.json")
-            path.write_text(dumped, encoding="utf-8")
-            mlflow.log_artifact(path)
-
     def log_eval_samples(self, samples: Dict[str, List[Dict[str, Any]]]) -> None:
         """Log evaluation samples to W&B.
 
@@ -315,7 +281,6 @@ class MlflowLogger:
         """
         import mlflow
 
-        logger.info("Logging evaluation samples to mlfow.")
         task_names: List[str] = [
             x for x in self.task_names if x not in self.group_names
         ]
@@ -342,10 +307,7 @@ class MlflowLogger:
 
             # log the samples as a W&B Table
             df = self._generate_dataset(eval_preds, self.task_configs.get(task_name))
-            mlflow.log_table(df, f"{task_name}_eval_results.json")
-
-            # log the samples as a json file as W&B Artifact
-            self._log_samples_as_artifact(eval_preds, task_name)
+            mlflow.log_table(df, f"tasks/{task_name}_eval_results.json")
 
         for group, grouped_tasks in tasks_by_groups.items():
             grouped_df = pd.DataFrame()
@@ -358,7 +320,6 @@ class MlflowLogger:
                 df["task"] = task_name
                 grouped_df = pd.concat([grouped_df, df], ignore_index=True)
 
-                # log the samples as a json file as W&B Artifact
-                self._log_samples_as_artifact(eval_preds, task_name)
+                mlflow.log_table(df, f"groups/{group}/{task_name}_eval_samples.json")
 
-            mlflow.log_table(grouped_df, f"{group}_eval_results.json")
+            mlflow.log_table(grouped_df, f"groups/{group}_eval_results.json")

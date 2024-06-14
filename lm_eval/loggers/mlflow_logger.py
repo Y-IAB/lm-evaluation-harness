@@ -94,7 +94,10 @@ class MlflowLogger:
             task_result = _results.get(task, dict())
             for metric_name, metric_value in task_result.items():
                 if isinstance(metric_value, str):
-                    summary[f"{task}/{metric_name}"] = metric_value
+                    if metric_value == "N/A":
+                        continue
+
+                    summary[f"{task}/{metric_name}"] = float(metric_value)
 
         for summary_metric, summary_value in summary.items():
             _task, _summary_metric = summary_metric.split("/")
@@ -182,9 +185,9 @@ class MlflowLogger:
         configs = self._get_config()
         mlflow.log_params(configs)
 
-        self.results = self._sanitize_results_dict()
+        summary, self.results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
-        mlflow.log_metrics(self.results)
+        mlflow.log_metrics(summary)
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()
         # Log the results dict as json to W&B Artifacts

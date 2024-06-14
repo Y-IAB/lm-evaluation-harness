@@ -94,10 +94,7 @@ class MlflowLogger:
             task_result = _results.get(task, dict())
             for metric_name, metric_value in task_result.items():
                 if isinstance(metric_value, str):
-                    if metric_value == "N/A":
-                        continue
-
-                    summary[f"{task}/{metric_name}"] = float(metric_value)
+                    summary[f"{task}/{metric_name}"] = metric_value
 
         for summary_metric, summary_value in summary.items():
             _task, _summary_metric = summary_metric.split("/")

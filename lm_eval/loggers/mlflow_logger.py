@@ -12,6 +12,7 @@ from lm_eval.loggers.utils import _handle_non_serializable, remove_none_pattern
 
 
 logger = logging.getLogger(__name__)
+mlflow_logger = logging.getLogger("mlflow")
 
 
 class MlflowLogger:
@@ -28,6 +29,7 @@ class MlflowLogger:
         """
         import mlflow
 
+        mlflow_logger.setLevel(logging.DEBUG)
         self.mlflow_args: Dict[str, Any] = kwargs
 
         self.run = mlflow.active_run()
@@ -176,6 +178,7 @@ class MlflowLogger:
         # Log configs to wandb
         import mlflow
 
+        logger.info("Logging evaluation result to mlfow.")
         configs = self._get_config()
         mlflow.log_params(configs)
 
@@ -304,6 +307,7 @@ class MlflowLogger:
         """
         import mlflow
 
+        logger.info("Logging evaluation samples to mlfow.")
         task_names: List[str] = [
             x for x in self.task_names if x not in self.group_names
         ]

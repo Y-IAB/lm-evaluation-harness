@@ -188,10 +188,11 @@ class MlflowLogger:
         configs = self._get_config()
         mlflow.log_params(configs)
 
-        summary, self.mlflow_results = self._sanitize_results_dict()
+        summary, mlflow_results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
         mlflow.log_table(summary, "summary.json")
-        # mlflow.log_table(self.mlflow_results, "results.json")
+        print(mlflow_results)
+        # mlflow.log_table(self.mlflow_results, "mlflow_results.json")
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()
         # Log the results dict as json to W&B Artifacts

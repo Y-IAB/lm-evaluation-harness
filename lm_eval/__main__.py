@@ -432,7 +432,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
                 if args.log_samples:
                     mlfow_logger.log_eval_samples(samples)
             except Exception as e:
-                eval_logger.info(f"Logging to MLFlow failed due to {e}")
+                eval_logger.info(f"Logging to MLFlow failed due to {e}", exc_info=True)
 
         evaluation_tracker.save_results_aggregated(
             results=results, samples=samples if args.log_samples else None

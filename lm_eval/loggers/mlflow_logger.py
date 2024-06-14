@@ -124,8 +124,8 @@ class MlflowLogger:
         ]
 
         def make_table(columns: List[str], key: str = "results"):
-            table = pd.DataFrame(columns=columns)
             results = copy.deepcopy(self.results)
+            table = []
 
             for k, dic in results.get(key).items():
                 if k in self.group_names and not key == "groups":
@@ -146,19 +146,25 @@ class MlflowLogger:
                         se = dic[m + "_stderr" + "," + f]
                         if se != "N/A":
                             se = "%.4f" % se
-                        table.add_data(*[k, version, f, n, m, str(v), str(se)])
-                    else:
-                        table.add_data(*[k, version, f, n, m, str(v), ""])
 
-            return table
+                        values = [k, version, f, n, m, str(v), str(se)]
+                        table.append(
+                            {column: values[idx] for idx, column in enumerate(columns)}
+                        )
+                    else:
+                        table.append(
+                            {column: values[idx] for idx, column in enumerate(columns)}
+                        )
+
+            return pd.DataFrame.from_records(table)
 
         # log the complete eval result to W&B Table
         table = make_table(["Tasks"] + columns, "results")
-        mlflow.log_table(table, "evaluation/eval_results")
+        mlflow.log_table(table, "evaluation/eval_results.json")
 
         if "groups" in self.results.keys():
             table = make_table(["Groups"] + columns, "groups")
-            mlflow.log_table(table, "evaluation/group_eval_results")
+            mlflow.log_table(table, "evaluation/group_eval_results.json")
 
     def _log_results_as_artifact(self) -> None:
         """Log results as JSON artifact to W&B."""
@@ -182,9 +188,10 @@ class MlflowLogger:
         configs = self._get_config()
         mlflow.log_params(configs)
 
-        summary, self.results = self._sanitize_results_dict()
+        summary, self.mlflow_results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
-        # mlflow.log_metrics(summary)
+        mlflow.log_table(summary, "summary.json")
+        # mlflow.log_table(self.mlflow_results, "results.json")
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()
         # Log the results dict as json to W&B Artifacts
@@ -334,7 +341,7 @@ class MlflowLogger:
 
             # log the samples as a W&B Table
             df = self._generate_dataset(eval_preds, self.task_configs.get(task_name))
-            mlflow.log_table(df, f"{task_name}_eval_results")
+            mlflow.log_table(df, f"{task_name}_eval_results.json")
 
             # log the samples as a json file as W&B Artifact
             self._log_samples_as_artifact(eval_preds, task_name)
@@ -353,4 +360,4 @@ class MlflowLogger:
                 # log the samples as a json file as W&B Artifact
                 self._log_samples_as_artifact(eval_preds, task_name)
 
-            mlflow.log_table(grouped_df, f"{group}_eval_results")
+            mlflow.log_table(grouped_df, f"{group}_eval_results.json")

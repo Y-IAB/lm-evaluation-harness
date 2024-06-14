@@ -105,7 +105,7 @@ class MlflowLogger:
         for task in self.task_names:
             _results.pop(task)
 
-        return summary, _results
+        return _results
 
     def _log_results_as_table(self) -> None:
         """Generate and log evaluation results as a table to W&B."""
@@ -172,10 +172,9 @@ class MlflowLogger:
         configs = self._get_config()
         mlflow.log_params(configs)
 
-        summary, mlflow_results = self._sanitize_results_dict()
+        mlflow_results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
-        print(summary)
-        print(mlflow_results)
+        mlflow.log_metrics(mlflow_results)
         # mlflow.log_table(self.mlflow_results, "mlflow_results.json")
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()

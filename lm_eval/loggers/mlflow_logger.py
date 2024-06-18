@@ -1,6 +1,6 @@
 import copy
 import logging
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
@@ -71,7 +71,7 @@ class MlflowLogger:
 
         return configs
 
-    def _sanitize_results_dict(self) -> Tuple[Dict[str, str], Dict[str, Any]]:
+    def _sanitize_results_dict(self) -> Dict[str, Any]:
         """Sanitize the results dictionary."""
         _results = copy.deepcopy(self.results.get("results", dict()))
 
@@ -175,6 +175,7 @@ class MlflowLogger:
         mlflow_results = self._sanitize_results_dict()
         # Log the evaluation metrics to wandb
         mlflow.log_metrics(mlflow_results)
+        mlflow.log_table(mlflow_results, "metrics.json")
         # mlflow.log_table(self.mlflow_results, "mlflow_results.json")
         # Log the evaluation metrics as W&B Table
         self._log_results_as_table()
@@ -319,6 +320,6 @@ class MlflowLogger:
                 df["task"] = task_name
                 grouped_df = pd.concat([grouped_df, df], ignore_index=True)
 
-                mlflow.log_table(df, f"groups/{group}/{task_name}_eval_samples.json")
+                mlflow.log_table(df, f"samples/{group}/{task_name}_eval_samples.json")
 
-            mlflow.log_table(grouped_df, f"groups/{group}_eval_results.json")
+            mlflow.log_table(grouped_df, f"samples/{group}_eval_results.json")

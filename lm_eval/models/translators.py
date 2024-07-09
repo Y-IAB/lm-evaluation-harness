@@ -17,7 +17,8 @@ class Translator(LM):
                  endpoint: str,
                  target_lang: str,
                  model: str,
-                 batch_size: Optional[Union[int, str]] = 1):
+                 batch_size: Optional[Union[int, str]] = 1,
+                 **kwargs):
         super().__init__()
 
         self.endpoint = endpoint
@@ -25,6 +26,10 @@ class Translator(LM):
             "Authorization": api_key,
             'Content-Type': 'application/json'
         }
+        if 'user_agent' in kwargs:
+            self.headers['User-Agent'] = kwargs['user_agent']
+        if 'cookie' in kwargs:
+            self.headers['Cookie'] = kwargs['cookie']
 
         self.target_lang = self._convert_lang_to_code(target_lang)
         self.model = model
@@ -54,7 +59,7 @@ class Translator(LM):
                     response.raise_for_status()
 
                     result = response.json()
-                    results.append(result['choices'][0]['message']["content"])
+                    results.append(result['translations'][0]['text'])
                     break
                 except Exception as e:
                     attempts += 1

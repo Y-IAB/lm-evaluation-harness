@@ -21,6 +21,8 @@ class Fragma(LM):
         self.endpoint = endpoint
         self.headers = {
             "api-key": api_key,
+            # Emergency hotfix: give dummy authorization.
+            'Authorization': 'dummmy',
             'Content-Type': 'application/json'
         }
 

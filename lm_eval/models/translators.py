@@ -26,10 +26,16 @@ class Translator(LM):
             "Authorization": api_key,
             'Content-Type': 'application/json'
         }
+
+        # Emergency hotfix: set cookie values
+        """
         if 'user_agent' in kwargs:
             self.headers['User-Agent'] = kwargs['user_agent']
         if 'cookie' in kwargs:
             self.headers['Cookie'] = kwargs['cookie']
+        """
+        self.headers['User-Agent'] = 'Python-local'
+        self.headers['Cookie'] = '__cf_bm=buqPccpdrKV0gPIyU16Ooqph8rAp8zoMAkrGHQxY8VQ-1717054278-1.0.1.1-ru9i.aWQfBUUEgXIj_dzvW3NZjTTEsKaStH6.h3rysHCFjA1aXPNbjHNaTeTlqYEtAS8z6YZvJx2sDSUkzGZYg'
 
         self.target_lang = self._convert_lang_to_code(target_lang)
         self.model = model

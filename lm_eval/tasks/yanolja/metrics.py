@@ -31,7 +31,7 @@ def bleurt(predictions, references):
 def agg_bleurt(items):
     global CURRENT_GPU_INDEX
     global AVAILABLE_GPUS
-    bleurt_fn = evaluate.load("bleurt", module_type="metric", checkpoint="bleurt-large-512")
+    bleurt_fn = evaluate.load('bleurt', 'bleurt-large-512')
 
     predictions, references = zip(*items)
     output = bleurt_fn.compute(predictions=predictions,

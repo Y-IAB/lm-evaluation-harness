@@ -36,7 +36,7 @@ export AVAILABLE_GPUS=0,1,2,3,4,5
 ```
 
 ### Dataset Setting
-Before you evaluate your models, you need to download dataset first. Please download dataset from the [link]([https://drive.google.com/file/d/1-CWu5E96mo9ub_-UsEXnX2JpIU9onaHN/view?usp=sharing](https://drive.google.com/file/d/1nUqTMr72QMEEBXCX1Un1AlFoWcuaWSvm/view?usp=sharing) and drop the JSONL dataset files into `lm_eval/tasks/yanolja/data`.
+Before you evaluate your models, you need to download dataset first. Please download dataset from the [link](https://drive.google.com/file/d/1Cr3enoTQpvCGE_XwqG8OWmg8y2E_9QwU/view?usp=sharing) and drop the JSONL dataset files into `lm_eval/tasks/yanolja/data`.
 
 ### Basic Usage
 After that, you can evaluate summarization/translation quality for your model:

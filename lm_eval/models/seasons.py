@@ -10,7 +10,7 @@ from lm_eval.api.registry import register_model
 
 
 @register_model("seasons")
-class Translator(LM):
+class Seasons(LM):
 
     def __init__(self,
                  api_key: str,
@@ -22,7 +22,7 @@ class Translator(LM):
 
         self.endpoint = endpoint
         self.headers = {
-            "Authorization": api_key,
+            "Authorization": "Bearer " + api_key,
             'Content-Type': 'application/json'
         }
 

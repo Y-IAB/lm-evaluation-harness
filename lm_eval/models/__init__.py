@@ -2,6 +2,7 @@ from . import (
     anthropic_llms,
     dummy,
     fragma,
+    seasons,
     gguf,
     huggingface,
     mamba_lm,

@@ -42,7 +42,8 @@ class Seasons(LM):
             data = {
                 "json": [source_text],
                 "target": self.target_lang,
-                "model": self.model
+                "model": self.model,
+                "auto_context": True
             }
             max_attempts = 10
             attempts = 0

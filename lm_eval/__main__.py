@@ -213,7 +213,12 @@ def parse_eval_args() -> argparse.Namespace:
         default=None,
         help="Command separated string arguments to override task configurations, e.g. `doc_to_text=hello`",
     )
-
+    parser.add_argument(
+        "--json_mode",
+        action="store_true",
+        default=False,
+        help="parse prediction as json, get value from 'text' key",
+    )
     return parser.parse_args()
 
 
@@ -347,6 +352,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         random_seed=args.seed[0],
         numpy_random_seed=args.seed[1],
         torch_random_seed=args.seed[2],
+        json_mode=args.json_mode,
         **request_caching_args,
     )
 

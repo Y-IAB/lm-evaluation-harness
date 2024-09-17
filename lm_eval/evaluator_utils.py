@@ -2,6 +2,7 @@ import collections
 import math
 import pathlib
 import sys
+import json
 from typing import Dict, List, Optional, Tuple, Union
 
 from lm_eval.api import metrics
@@ -310,3 +311,28 @@ def run_task_tests(task_list: List[str]):
         raise ValueError(
             f"Not all tests for the specified tasks ({task_list}) ran successfully! Error code: {pytest_return_val}"
         )
+
+# load jsonized doc into original format
+def dejsonize(response):
+    def safe_json_loads(item):
+        try:
+            loaded_json = json.loads(item)
+            if "text" in loaded_json:
+                return loaded_json["text"]
+            else:
+                print("Error: 'text' field is missing in the JSON object: ", item)
+                print("Instead of 'text', get first key of json object.")
+                first_key = list(loaded_json.keys())[0]
+                return loaded_json[first_key]
+        except json.JSONDecodeError as e:
+            print(e)
+            return item
+    
+    if isinstance(response, dict):
+        return {k: safe_json_loads(v) for k, v in response.items()}
+    elif isinstance(response, list):
+        return [safe_json_loads(v) for v in response]
+    elif isinstance(response, str):
+        return safe_json_loads(response)
+    else:
+        return response

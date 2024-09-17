@@ -18,6 +18,7 @@ from lm_eval.evaluator_utils import (
     prepare_print_tasks,
     print_writeout,
     run_task_tests,
+    dejsonize,
 )
 from lm_eval.logging_utils import add_env_info, get_git_commit_hash
 from lm_eval.tasks import TaskManager, get_task_dict
@@ -54,6 +55,7 @@ def simple_evaluate(
     random_seed: int = 0,
     numpy_random_seed: int = 1234,
     torch_random_seed: int = 1234,
+    json_mode: bool = False,
 ):
     """Instantiate and evaluate a model on a list of tasks.
 
@@ -237,6 +239,7 @@ def simple_evaluate(
         write_out=write_out,
         log_samples=log_samples,
         verbosity=verbosity,
+        json_mode=json_mode,
     )
 
     if lm.rank == 0:
@@ -279,6 +282,7 @@ def evaluate(
     write_out: bool = False,
     log_samples: bool = True,
     verbosity: str = "INFO",
+    json_mode: bool = False,
 ):
     """Instantiate and evaluate a model on a list of tasks.
 
@@ -323,6 +327,7 @@ def evaluate(
             world_size=lm.world_size,
             cache_requests=cache_requests,
             rewrite_requests_cache=rewrite_requests_cache,
+            json_mode=json_mode,
         )
         eval_logger.debug(
             f"Task: {task_output.task_name}; number of requests on this rank: {len(task.instances)}"
@@ -399,8 +404,12 @@ def evaluate(
             )
             for doc_id, doc in doc_iterator:
                 requests = instances_by_doc_id[doc_id]
+                request_results = [req.filtered_resps[filter_key] for req in requests]
+                if json_mode:
+                    request_results = [dejsonize(res) for res in request_results]
+                    
                 metrics = task.process_results(
-                    doc, [req.filtered_resps[filter_key] for req in requests]
+                    doc, request_results
                 )
                 if log_samples:
                     target = task.doc_to_target(doc)
